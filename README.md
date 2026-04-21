@@ -2,6 +2,8 @@
 
 A full-stack e-commerce application with secure escrow payment integration using Escrow.com API.
 
+![Dashboard Preview](https://res.cloudinary.com/dhyo79gy1/image/upload/v1776769465/escrow_xmosxw.jpg)
+
 ## 🏗️ Architecture
 
 - **Frontend**: React with Bootstrap 5

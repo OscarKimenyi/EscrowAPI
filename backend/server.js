@@ -23,7 +23,12 @@ const ESCROW_EMAIL = process.env.ESCROW_EMAIL;
 const ESCROW_API_KEY = process.env.ESCROW_API_KEY;
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // Products database (replace with real DB in production)

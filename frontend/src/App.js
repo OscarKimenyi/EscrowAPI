@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ProductCard from './components/ProductCard';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ProductCard from "./components/ProductCard";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -16,46 +16,55 @@ function App() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/products');
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/products`,
+      );
       setProducts(response.data);
       setLoading(false);
     } catch (err) {
-      setError('Failed to load products');
+      setError("Failed to load products");
       setLoading(false);
     }
   };
 
   const handlePurchase = async (productId, email) => {
     try {
-      console.log('🛒 Initiating purchase...', { productId, email });
-      
-      const response = await axios.post('/api/create-escrow', {
-        productId,
-        buyerEmail: email
-      });
+      console.log("Initiating purchase...", { productId, email });
 
-      console.log('📦 Response received:', response.data);
-      console.log('🔗 Checkout URL:', response.data.checkoutUrl);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/create-escrow`,
+        {
+          productId,
+          buyerEmail: email,
+        },
+      );
+
+      console.log("Response received:", response.data);
+      console.log("Checkout URL:", response.data.checkoutUrl);
 
       if (response.data.success) {
-        showNotification('success', 'Escrow transaction created! Redirecting to payment...');
-        
+        showNotification(
+          "success",
+          "Escrow transaction created! Redirecting to payment...",
+        );
+
         // Redirect to Escrow.com checkout
-        console.log('🚀 Opening checkout URL in new tab...');
+        console.log("Opening checkout URL in new tab...");
         setTimeout(() => {
           if (response.data.checkoutUrl) {
-            console.log('Opening:', response.data.checkoutUrl);
-            window.open(response.data.checkoutUrl, '_blank');
+            console.log("Opening:", response.data.checkoutUrl);
+            window.open(response.data.checkoutUrl, "_blank");
           } else {
-            console.error('❌ No checkout URL in response!');
-            showNotification('danger', 'No checkout URL received from server');
+            console.error("No checkout URL in response!");
+            showNotification("danger", "No checkout URL received from server");
           }
         }, 1500);
       }
     } catch (err) {
-      console.error('❌ Purchase error:', err);
-      const errorMessage = err.response?.data?.error || 'Failed to create escrow transaction';
-      showNotification('danger', errorMessage);
+      console.error("Purchase error:", err);
+      const errorMessage =
+        err.response?.data?.error || "Failed to create escrow transaction";
+      showNotification("danger", errorMessage);
     }
   };
 
@@ -66,7 +75,10 @@ function App() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh" }}
+      >
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -103,11 +115,14 @@ function App() {
       {/* Notification */}
       {notification && (
         <div className="container mt-3">
-          <div className={`alert alert-${notification.type} alert-dismissible fade show`} role="alert">
+          <div
+            className={`alert alert-${notification.type} alert-dismissible fade show`}
+            role="alert"
+          >
             {notification.message}
-            <button 
-              type="button" 
-              className="btn-close" 
+            <button
+              type="button"
+              className="btn-close"
               onClick={() => setNotification(null)}
             ></button>
           </div>
@@ -154,7 +169,9 @@ function App() {
                   <div className="col-md-3">
                     <div className="text-center">
                       <i className="bi bi-4-circle-fill fs-2 text-primary"></i>
-                      <p className="mt-2 small">Funds released after approval</p>
+                      <p className="mt-2 small">
+                        Funds released after approval
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -165,10 +182,10 @@ function App() {
 
         {/* Products */}
         <div className="row">
-          {products.map(product => (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
               onPurchase={handlePurchase}
             />
           ))}
@@ -180,7 +197,8 @@ function App() {
         <div className="container text-center">
           <p className="mb-0">
             <i className="bi bi-shield-check me-2"></i>
-            Secured by <strong>Escrow.com</strong> - The world's most trusted escrow service
+            Secured by <strong>Escrow.com</strong> - The world's most trusted
+            escrow service
           </p>
           <p className="small text-muted mt-2 mb-0">
             Your payment is protected until you confirm receipt of your item

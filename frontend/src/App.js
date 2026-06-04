@@ -4,7 +4,7 @@ import ProductCard from "./components/ProductCard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-const API_URL = "https://escrow-shop.onrender.com";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -72,13 +72,11 @@ function App() {
 
   if (loading) {
     return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "100vh" }}
-      >
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+      <div className="container text-center mt-5">
+        <div className="spinner-border text-primary mb-3" role="status" />
+        <p className="text-muted">
+          Loading products... (may take up to 30s on first visit)
+        </p>
       </div>
     );
   }

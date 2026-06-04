@@ -4,6 +4,8 @@ import ProductCard from "./components/ProductCard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
+const API_URL = "https://escrow-shop.onrender.com";
+
 function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,9 +18,7 @@ function App() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/products`,
-      );
+      const response = await axios.get(`${API_URL}/api/products`);
       setProducts(response.data);
       setLoading(false);
     } catch (err) {
@@ -31,13 +31,10 @@ function App() {
     try {
       console.log("Initiating purchase...", { productId, email });
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/create-escrow`,
-        {
-          productId,
-          buyerEmail: email,
-        },
-      );
+      const response = await axios.post(`${API_URL}/api/create-escrow`, {
+        productId,
+        buyerEmail: email,
+      });
 
       console.log("Response received:", response.data);
       console.log("Checkout URL:", response.data.checkoutUrl);
